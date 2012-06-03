@@ -1,0 +1,80 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="com.bravelocation.bedsideClock.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    Background="Black"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    shell:SystemTray.IsVisible="False">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid IsHitTestVisible="True" Background="Black">
+        <!--Create a 2 x 2 grid to store an image and button layout.-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition x:Name="BottomRow" Height="80"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="80"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Weather image -->
+        <Image Source="blank.png" Height="32" Width="32" x:Name="WeatherImage" Grid.Row="0" Grid.Column="0"
+               Style="{StaticResource MainPageIcon}"/>
+        
+        <!-- Main date -->
+        <TextBlock x:Name="CurrentDate" 
+                       Style="{StaticResource MainPageText}" 
+                       Grid.Row="0" Grid.Column="1"                                                    
+                       Width="Auto" Height="Auto" />
+
+        <!-- Sun/moon/dawn/dusk image -->
+        <Image Source="blank.png" Height="32" Width="32" x:Name="SunTypeImage" Grid.Row="0" Grid.Column="2"
+               Style="{StaticResource MainPageIcon}" />
+
+        <!-- Main time -->
+        <TextBlock x:Name="CurrentTime" 
+                   Margin="0,0" 
+                   Style="{StaticResource MainPageTime}" 
+                   Foreground="Green" Grid.Row="1" Grid.Column="1" />
+       
+        <!-- Location text -->
+        <TextBlock x:Name="LocationText" Text="{Binding Path=LocalisedResources.InitialLocationText, Source={StaticResource LocalisedStrings}}" 
+                   Style="{StaticResource MainPageText}" 
+                       Foreground="Green" Grid.Column="1"  Grid.Row="2"
+                       Width="Auto" Height="Auto" />
+
+          <Button x:Name="SettingsButton" Width="80" Height="80"                 
+                Style="{StaticResource MainPageSettingsButton}" 
+                Grid.Row="2" Grid.Column="2"
+                Click="SettingsButton_Click">
+            <Image Source="/BedsideClock;component/appbar.feature.settings.rest.png" Height="48" Width="48"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1" />
+        </Button>
+        
+        <!-- Location progress bar -->
+        <ProgressBar Grid.Row="2" Grid.Column="1" 
+                     Foreground="Green" 
+                     HorizontalAlignment="Stretch" 
+                     x:Name="LocationProgressBar" 
+                     VerticalAlignment="Bottom" 
+                     Width="Auto" 
+                     IsIndeterminate="True" 
+                     IsEnabled="False" 
+                     Visibility="Collapsed" />
+
+
+
+    </Grid>
+</phone:PhoneApplicationPage>

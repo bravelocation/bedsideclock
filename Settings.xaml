@@ -1,0 +1,97 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="com.bravelocation.bedsideClock.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="Green"
+    Background="Black"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False">
+
+    
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" IsHitTestVisible="True" Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="700"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        
+            <!--Pivot Control-->
+        <controls:Pivot Title="BEDSIDE CLOCK"                     
+                  Grid.Row="0" Grid.Column="0" Background="Black" Foreground="White">
+            <!--Pivot item one-->
+            <controls:PivotItem Header="{Binding Path=LocalisedResources.SettingsTitleText, Source={StaticResource LocalisedStrings}}">
+
+                <!--ContentPanel - place additional content here-->
+                <Grid x:Name="ContentPanel" Grid.Row="0" Margin="12,0,0,0">
+                    <Grid x:Name="InnerGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="110" />
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="110" />
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="110" />
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="110" />
+ 
+                        </Grid.RowDefinitions>
+
+                        <!-- Dimmed switch -->
+                        <TextBlock Text="{Binding Path=LocalisedResources.DimmedSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingsLabel}"  />
+                        <toolkit:ToggleSwitch x:Name="DimmedSwitch"  Grid.Row="1" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+
+                        <!-- Location switch -->
+                        <TextBlock Text="{Binding Path=LocalisedResources.LocationSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingsLabel}"/>
+                        <toolkit:ToggleSwitch x:Name="LocationSwitch" Grid.Row="3" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+
+                        <!-- Weather switch -->
+                        <TextBlock Text="{Binding Path=LocalisedResources.WeatherSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="4" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
+                        <toolkit:ToggleSwitch x:Name="WeatherSwitch" Grid.Row="5" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+
+                        <!-- Moon switch -->
+                        <TextBlock Text="{Binding Path=LocalisedResources.PhaseOfMoonSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="6" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
+                        <toolkit:ToggleSwitch x:Name="MoonSwitch" Grid.Row="7" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+
+ 
+                    </Grid>
+                </Grid>
+            </controls:PivotItem>
+
+            <!--About Pivot item -->
+            <controls:PivotItem Header="{Binding Path=LocalisedResources.AboutSettingsLinkText, Source={StaticResource LocalisedStrings}}">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="{Binding Path=LocalisedResources.AboutText1, Source={StaticResource LocalisedStrings}}" />
+                    <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="Also, for non-English users please note the translations were done automatically by Bing Translate, so apologies if they are not very good :-(" />
+                    <HyperlinkButton x:Name="feedbackButton" Style="{StaticResource SettingsLink}" Click="feedbackButton_Click" Content="{Binding Path=LocalisedResources.FeedbackLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="aboutButton" Style="{StaticResource SettingsLink}" Click="aboutButton_Click" Content="{Binding Path=LocalisedResources.BraveLocationSiteLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="yahooWeatherButton" Style="{StaticResource SettingsLink}" Click="yahooWeatherButton_Click" Content="{Binding Path=LocalisedResources.YahooWeatherLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="elliottButton" Style="{StaticResource SettingsLink}" Click="elliottButton_Click" Content="{Binding Path=LocalisedResources.ElliottLinkText, Source={StaticResource LocalisedStrings}}" />
+                </StackPanel>
+            </controls:PivotItem>
+
+            <!--Privacy Pivot item -->
+            <controls:PivotItem Header="{Binding Path=LocalisedResources.PrivacySettingsLinkText, Source={StaticResource LocalisedStrings}}">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="{Binding Path=LocalisedResources.PrivacyText1, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="privacyButton" Style="{StaticResource SettingsLink}" Click="privacyButton_Click" Content="{Binding Path=LocalisedResources.YahooPrivacySiteLinkText, Source={StaticResource LocalisedStrings}}" />
+                </StackPanel>
+            </controls:PivotItem>
+        </controls:Pivot>
+
+        <Button 
+            Content="{Binding Path=LocalisedResources.SettingsOKButtonText, Source={StaticResource LocalisedStrings}}" 
+            Grid.Row="1" Grid.Column="0" 
+            Click="okButton_Click" 
+            Style="{StaticResource SettingsButton}"/> 
+    </Grid>
+
+</phone:PhoneApplicationPage>
