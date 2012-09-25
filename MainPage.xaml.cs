@@ -23,7 +23,6 @@ using Microsoft.Phone.Info;
 using System.Windows.Threading;
 using Microsoft.Devices.Sensors;
 using System.Windows.Media.Imaging;
-using Microsoft.Xna.Framework;
 
 namespace com.bravelocation.bedsideClock
 {
@@ -534,7 +533,7 @@ namespace com.bravelocation.bedsideClock
             this.LocationProgressBar.IsEnabled = false;
             this.LocationProgressBar.Visibility = System.Windows.Visibility.Collapsed;
             
-            if (e.Error != null)
+            if (e.Cancelled || e.Error != null)
             {
                 this.LocationText.Text = StringResources.LocationNotFoundText;
                 return;
@@ -627,6 +626,11 @@ namespace com.bravelocation.bedsideClock
 
             // Parse the Yahoo XML returned
             // See documentation at http://developer.yahoo.com/weather/
+            if (e.Cancelled || e.Error != null)
+            {
+                return;
+            }
+
             XElement rootElement;
             try
             {
@@ -650,7 +654,7 @@ namespace com.bravelocation.bedsideClock
                         // Find the correct forecast node depending on time
                         foreach (XElement forecast in item.Descendants())
                         {
-                            if (forecast.Name.LocalName == "forecast")
+                            if (forecast.Name != null && forecast.Name.LocalName == "forecast")
                             {
                                 // If correctly today or tomorrow, depending on time, set image as code
                                 XAttribute forecastDay = forecast.Attribute("day");
