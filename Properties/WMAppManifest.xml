@@ -1,56 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
-  <DefaultLanguage xmlns="" code="en-US" />
-  <Languages xmlns="">
-    <Language code="de-DE" />
-    <Language code="es-ES" />
-    <Language code="fr-FR" />
-    <Language code="nl-NL" />
-    <Language code="it-IT" />
-    <Language code="" />
-  </Languages>
-  <App xmlns="" ProductID="{af57ef8f-002f-4992-b485-08cfcd55e074}" Title="Bedside Clock" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="bedsiteclock author" Description="Sample description" Publisher="bedsiteclock" PublisherID="{4912cc70-2207-4840-a992-8802ea9716e5}">
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
+  <App xmlns="" ProductID="{281713bb-99de-4623-b201-94bdd8c095d4}" Title="Bedside Clock" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="bedsiteclock author" Description="Sample description" Publisher="bedsiteclock">
     <IconPath IsRelative="true" IsResource="false">nounclock.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_GAMERSERVICES" />
       <Capability Name="ID_CAP_IDENTITY_DEVICE" />
       <Capability Name="ID_CAP_IDENTITY_USER" />
       <Capability Name="ID_CAP_LOCATION" />
+      <Capability Name="ID_CAP_MEDIALIB" />
       <Capability Name="ID_CAP_MICROPHONE" />
       <Capability Name="ID_CAP_NETWORKING" />
       <Capability Name="ID_CAP_PHONEDIALER" />
       <Capability Name="ID_CAP_PUSH_NOTIFICATION" />
       <Capability Name="ID_CAP_SENSORS" />
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
-      <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
-      <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
-      <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="bedsiteclockToken" TaskName="_default">
-        <TemplateFlip>
-          <SmallImageURI IsResource="false" IsRelative="true">nounclock.png</SmallImageURI>
+        <TemplateType5>
+          <BackgroundImageURI IsRelative="true" IsResource="false">nounclock.png</BackgroundImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsResource="false" IsRelative="true">nounclock.png</BackgroundImageURI>
           <Title>Bedside Clock</Title>
-          <BackContent></BackContent>
-          <BackBackgroundImageURI></BackBackgroundImageURI>
-          <BackTitle></BackTitle>
-          <LargeBackgroundImageURI></LargeBackgroundImageURI>
-          <LargeBackContent></LargeBackContent>
-          <LargeBackBackgroundImageURI></LargeBackBackgroundImageURI>
-          <DeviceLockImageURI></DeviceLockImageURI>
-          <HasLarge>false</HasLarge>
-        </TemplateFlip>
+        </TemplateType5>
       </PrimaryToken>
     </Tokens>
-    <ScreenResolutions>
-      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
-      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
-      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
-    </ScreenResolutions>
   </App>
 </Deployment>
