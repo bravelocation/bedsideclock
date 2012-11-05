@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010 Express for Windows Phone
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bedsideclock", "bedsideclock.csproj", "{FB1E862B-B6C5-49BD-AC9E-8C5B4965F5FD}"
 EndProject
 Global

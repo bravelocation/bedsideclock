@@ -32,37 +32,33 @@
 
                 <!--ContentPanel - place additional content here-->
                 <Grid x:Name="ContentPanel" Grid.Row="0" Margin="12,0,0,0">
-                    <Grid x:Name="InnerGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="110" />
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="110" />
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="110" />
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="110" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="110" />
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="110" />
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="110" />
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="110" />
  
-                        </Grid.RowDefinitions>
+                    </Grid.RowDefinitions>
 
-                        <!-- Dimmed switch -->
-                        <TextBlock Text="{Binding Path=LocalisedResources.DimmedSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingsLabel}"  />
-                        <toolkit:ToggleSwitch x:Name="DimmedSwitch"  Grid.Row="1" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+                    <!-- Dimmed switch -->
+                    <TextBlock Text="{Binding Path=LocalisedResources.DimmedSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingsLabel}"  />
+                    <toolkit:ToggleSwitch x:Name="DimmedSwitch"  Grid.Row="1" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
 
-                        <!-- Location switch -->
-                        <TextBlock Text="{Binding Path=LocalisedResources.LocationSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingsLabel}"/>
-                        <toolkit:ToggleSwitch x:Name="LocationSwitch" Grid.Row="3" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+                    <!-- Location switch -->
+                    <TextBlock Text="{Binding Path=LocalisedResources.LocationSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="2" Grid.Column="0" Style="{StaticResource SettingsLabel}"/>
+                    <toolkit:ToggleSwitch x:Name="LocationSwitch" Grid.Row="3" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
 
-                        <!-- Weather switch -->
-                        <TextBlock Text="{Binding Path=LocalisedResources.WeatherSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="4" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
-                        <toolkit:ToggleSwitch x:Name="WeatherSwitch" Grid.Row="5" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
+                    <!-- Weather switch -->
+                    <TextBlock Text="{Binding Path=LocalisedResources.WeatherSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="4" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
+                    <toolkit:ToggleSwitch x:Name="WeatherSwitch" Grid.Row="5" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
 
-                        <!-- Moon switch -->
-                        <TextBlock Text="{Binding Path=LocalisedResources.PhaseOfMoonSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="6" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
-                        <toolkit:ToggleSwitch x:Name="MoonSwitch" Grid.Row="7" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
-
- 
-                    </Grid>
+                    <!-- Moon switch -->
+                    <TextBlock Text="{Binding Path=LocalisedResources.PhaseOfMoonSettingsText, Source={StaticResource LocalisedStrings}}" Grid.Row="6" Grid.Column="0" Style="{StaticResource SettingsLabel}" />
+                    <toolkit:ToggleSwitch x:Name="MoonSwitch" Grid.Row="7" Grid.Column="0" Style="{StaticResource SettingsToggle}" />
                 </Grid>
             </controls:PivotItem>
 
@@ -86,12 +82,6 @@
                 </StackPanel>
             </controls:PivotItem>
         </controls:Pivot>
-
-        <Button 
-            Content="{Binding Path=LocalisedResources.SettingsOKButtonText, Source={StaticResource LocalisedStrings}}" 
-            Grid.Row="1" Grid.Column="0" 
-            Click="okButton_Click" 
-            Style="{StaticResource SettingsButton}"/> 
     </Grid>
 
 </phone:PhoneApplicationPage>

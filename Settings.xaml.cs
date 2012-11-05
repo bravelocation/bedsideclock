@@ -44,9 +44,15 @@ namespace com.bravelocation.bedsideClock
             this.MoonSwitch.Unchecked += new EventHandler<RoutedEventArgs>(MoonSwitch_Changed);
         }
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Overrides the default back button behaviour to ensure new settings are picked up
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
+            // Force a navigation reload of the main screen, to ensure new settings are picked up
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));  
+            e.Cancel = true;  //Cancels the default behavior.
         }
 
         private void feedbackButton_Click(object sender, RoutedEventArgs e)
