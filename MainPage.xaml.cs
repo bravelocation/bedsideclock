@@ -391,7 +391,7 @@ namespace com.bravelocation.bedsideClock
                 default: moonSource = "quartermoon.png"; break;
             }
 
-            this.SunTypeImage.Source = new BitmapImage(new Uri(moonSource, UriKind.RelativeOrAbsolute));
+            this.SunTypeImage.Source = new BitmapImage(new Uri("moon/" + moonSource, UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
@@ -402,14 +402,14 @@ namespace com.bravelocation.bedsideClock
         private void accelerometer_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> e)
         {
             // Dispatches event to UI thread
-            Deployment.Current.Dispatcher.BeginInvoke(() => MyReadingChanged(e));
+            Deployment.Current.Dispatcher.BeginInvoke(() => AccelerometerReadingChanged(e));
         }
         
         /// <summary>
         /// Handles accelerometer event on UI thread
         /// </summary>
         /// <param name="e">Event arguments</param>
-        private void MyReadingChanged(SensorReadingEventArgs<AccelerometerReading> e)
+        private void AccelerometerReadingChanged(SensorReadingEventArgs<AccelerometerReading> e)
         {
             int latestX = Convert.ToInt32(e.SensorReading.Acceleration.X * 5.0);
             int latestY = Convert.ToInt32(e.SensorReading.Acceleration.Y * 5.0);
