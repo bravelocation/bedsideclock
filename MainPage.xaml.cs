@@ -29,11 +29,6 @@ namespace com.bravelocation.bedsideClock
     public partial class MainPage : PhoneApplicationPage
     {
         /// <summary>
-        /// Comma splitter
-        /// </summary>
-        private static char[] CommaSplitter = { ',' };
-
-        /// <summary>
         /// User settings
         /// </summary>
         private UserSettings userSettings = new UserSettings();
@@ -516,11 +511,9 @@ namespace com.bravelocation.bedsideClock
         private void LookupAddress()
         {
             // Use location service
-            string locationUrl = String.Format(CultureInfo.InvariantCulture, "http://where.yahooapis.com/geocode?q={0:0.00000000000000},+{1:0.00000000000000}&gflags=R&flags=G&appid=1auJbv6k", this.currentLocation.Latitude, this.currentLocation.Longitude);
-
             WebClient addressLookup = new WebClient();
             addressLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(addressLookup_DownloadStringCompleted);
-            addressLookup.DownloadStringAsync(new Uri(locationUrl));
+            addressLookup.DownloadStringAsync(YahooLocationServices.YahooLocationUri(this.currentLocation));
         }
 
         /// <summary>
@@ -539,59 +532,13 @@ namespace com.bravelocation.bedsideClock
                 return;
             }
 
-            // Parse the Yahoo XML returned
-            // See documentation at http://developer.yahoo.com/geo/placefinder/guide/
-            XElement rootElement;
-            try
+            this.LocationText.Text = YahooLocationServices.ParseAddress(e.Result);
+
+            if (this.LocationText.Text != StringResources.LocationNotFoundText)
             {
-                rootElement = XElement.Parse(e.Result);
-            }
-            catch (XmlException)
-            {
-                this.LocationText.Text = StringResources.LocationNotFoundText;
-                return;
-            }
-
-            if (rootElement == null)
-            {
-                this.LocationText.Text = StringResources.LocationNotFoundText;
-                return;
-            }
-
-            // Check for error code
-            XElement errorCode = rootElement.Element("Error");
-            if (errorCode == null || errorCode.Value != "0")
-            {
-                this.LocationText.Text = StringResources.LocationNotFoundText;
-                return;
-            }
-
-            XElement result = rootElement.Element("Result");
-            if (result != null)
-            {
-                XElement line1 = result.Element("line1");
-                XElement line2 = result.Element("line2");
-                XElement line3 = result.Element("line3");
-                XElement line4 = result.Element("line4");
-
-                StringBuilder address = new StringBuilder();
-                address.Append(this.ParseLocationElement(line1));
-                address.Append(" " + this.ParseLocationElement(line2));
-                address.Append(" " + this.ParseLocationElement(line3));
-                address.Append(" " + this.ParseLocationElement(line4));
-
-                this.LocationText.Text = address.ToString().Trim();
-
-                // Pick up the WOE ID and lookup weather
-                XElement woeid = result.Element("woeid");
-                this.currentWoeId = this.ParseLocationElement(woeid);
+                this.currentWoeId = YahooLocationServices.ParseWoeId(e.Result);
                 this.LookupWeather(this.userSettings.ShowWeather);
-
-                return;
             }
-
-            // Something went wrong if we got here
-            this.LocationText.Text = StringResources.LocationNotFoundText;
         }
 
         /// <summary>
@@ -606,11 +553,9 @@ namespace com.bravelocation.bedsideClock
             }
 
             // Use weather service
-            string weatherUrl = String.Format(CultureInfo.InvariantCulture, "http://weather.yahooapis.com/forecastrss?w={0}", this.currentWoeId);
-
             WebClient weatherLookup = new WebClient();
             weatherLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(weatherLookup_DownloadStringCompleted);
-            weatherLookup.DownloadStringAsync(new Uri(weatherUrl));
+            weatherLookup.DownloadStringAsync(YahooWeather.YahooWeatherUri(this.currentWoeId));
         }
 
         /// <summary>
@@ -631,182 +576,12 @@ namespace com.bravelocation.bedsideClock
                 return;
             }
 
-            XElement rootElement;
-            try
-            {
-                rootElement = XElement.Parse(e.Result);
-            }
-            catch (XmlException)
-            {
-                return;
-            }
+            int parsedWeather = YahooWeather.ParseWeather(e.Result, this.currentLocation);
 
-            string weatherForecastDay = this.WeatherForecastDay();
-
-            if (rootElement != null)
-            {
-                XElement channel = rootElement.Element("channel");
-                if (channel != null)
-                {
-                    XElement item = channel.Element("item");
-                    if (item != null)
-                    {
-                        // Find the correct forecast node depending on time
-                        foreach (XElement forecast in item.Descendants())
-                        {
-                            if (forecast.Name != null && forecast.Name.LocalName == "forecast")
-                            {
-                                // If correctly today or tomorrow, depending on time, set image as code
-                                XAttribute forecastDay = forecast.Attribute("day");
-                                if (forecastDay != null && forecastDay.Value == weatherForecastDay)
-                                {
-                                    // Use the code to set the image
-                                    XAttribute forecastCode = forecast.Attribute("code");
-                                    if (forecastCode != null)
-                                    {
-                                        // Set the image URL
-                                        string imageName = String.Format(CultureInfo.InvariantCulture, "weather/{0}.png", this.MapWeatherCodeToImage(forecastCode.Value));
-                                        this.WeatherImage.Source = new BitmapImage(new Uri(imageName, UriKind.RelativeOrAbsolute));
-                                        this.WeatherImage.Visibility = System.Windows.Visibility.Visible;
-
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Turns weather code into logical image
-        /// </summary>
-        /// <param name="code">Yahoo! Weather code</param>
-        /// <returns>String referencing image to use for weather</returns>
-        private string MapWeatherCodeToImage(string code)
-        {
-            switch (code)
-            {
-                case "9":
-                case "11":
-                case "12":
-                case "40":
-                    return "cloudy-with-rain";
-                case "23":
-                case "24":
-                case "29":
-                case "30":
-                case "33":
-                case "34":
-                case "44":
-                    return "cloudy-with-sunshine";
-                case "20":
-                case "22":
-                case "26":
-                case "27":
-                case "28":
-                    return "cloudy";
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "13":
-                case "14":
-                case "18":
-                case "46":
-                    return "light-snow";
-                case "10":
-                case "15":
-                case "16":
-                case "43":
-                    return "heavy-snow";
-                case "0": 
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "17":
-                case "19":
-                case "35":
-                case "37":
-                case "38":
-                case "39":
-                case "45":
-                case "47":
-                    return "storm";
-                case "21":
-                case "25":
-                case "31":
-                case "32":
-                case "36":
-                    return "sunny";
-                default:
-                    return "blank";
-            }
-        }
-
-        /// <summary>
-        /// Calculates the day of the week to use for the forecast
-        /// </summary>
-        /// <returns>String matching values from http://developer.yahoo.com/weather/ </returns>
-        private string WeatherForecastDay()
-        {
-            DayOfWeek forecastDayOfWeek = DateTime.Now.DayOfWeek;
-
-            // If after sunset, show tomorrow's weather
-            DateTime sunset = SunriseCalculator.SunriseAndSunset.Sunset(this.currentLocation.Latitude, this.currentLocation.Longitude, DateTime.Now);
-
-            if (DateTime.Now.Hour >= sunset.Hour)
-            {
-                if (forecastDayOfWeek == DayOfWeek.Saturday)
-                {
-                    forecastDayOfWeek = DayOfWeek.Sunday;
-                }
-                else
-                {
-                    forecastDayOfWeek = forecastDayOfWeek + 1;
-                }
-            }
-
-            // Now convert to Yahoo string like {Mon Tue Wed Thu Fri Sat Sun}
-            switch (forecastDayOfWeek)
-            {
-                case DayOfWeek.Monday: return "Mon";
-                case DayOfWeek.Tuesday: return "Tue";
-                case DayOfWeek.Wednesday: return "Wed";
-                case DayOfWeek.Thursday: return "Thu";
-                case DayOfWeek.Friday: return "Fri";
-                case DayOfWeek.Saturday: return "Sat";
-                case DayOfWeek.Sunday: return "Sun";
-            }
-
-            // Logically cannot get here!
-            return String.Empty;
-        }
-
-        /// <summary>
-        /// Parses a location element for valid values
-        /// </summary>
-        /// <param name="line">Line element</param>
-        /// <returns>String or empty</returns>
-        private string ParseLocationElement(XElement line)
-        {
-            if (line == null)
-            {
-                return String.Empty;
-            }
-
-            // Don't show if values are actually lat/long values
-            double parsedLine = Double.MinValue;
-            string[] parts = line.Value.Split(MainPage.CommaSplitter, StringSplitOptions.RemoveEmptyEntries);
-
-            if (parts.Length == 2 && Double.TryParse(parts[0], out parsedLine) && Double.TryParse(parts[1], out parsedLine))
-            {
-                return String.Empty;
-            }
-
-            return line.Value;
+            // Set the image URL
+            string imageName = String.Format(CultureInfo.InvariantCulture, "weather/{0}.png", YahooWeather.MapWeatherCodeToImage(parsedWeather));
+            this.WeatherImage.Source = new BitmapImage(new Uri(imageName, UriKind.RelativeOrAbsolute));
+            this.WeatherImage.Visibility = System.Windows.Visibility.Visible;
         }
 
         /// <summary>

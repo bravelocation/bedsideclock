@@ -125,6 +125,8 @@
     </Compile>
     <Compile Include="SunriseAndSunset.cs" />
     <Compile Include="UserSettings.cs" />
+    <Compile Include="YahooLocationServices.cs" />
+    <Compile Include="YahooWeather.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
