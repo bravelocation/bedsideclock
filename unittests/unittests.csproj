@@ -6,8 +6,8 @@
     <ProjectGuid>{067CAF78-8C5D-43B0-BDC7-82CD9EA4758A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.bravelocation.bedsideClock</RootNamespace>
-    <AssemblyName>com.bravelocation.bedsideClock.unittests</AssemblyName>
+    <RootNamespace>Com.BraveLocation.BedsideClock</RootNamespace>
+    <AssemblyName>Com.BraveLocation.BedsideClock.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Device" />
     <Reference Include="xunit">
       <HintPath>..\..\xunit-1.9.1\xunit.dll</HintPath>
     </Reference>
@@ -81,6 +82,9 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\code\xunit-1.9.1\xunit.console.clr4.x86.exe $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
