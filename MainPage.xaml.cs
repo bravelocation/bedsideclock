@@ -34,7 +34,7 @@ namespace Com.BraveLocation.BedsideClock
     /// <summary>
     /// Class for main page of application
     /// </summary>
-    public partial class MainPage : PhoneApplicationPage
+    public partial class MainPage : PhoneApplicationPage, IDisposable
     {
         /// <summary>
         /// Number of seconds before fading
@@ -103,6 +103,11 @@ namespace Com.BraveLocation.BedsideClock
         private string currentWoeId = string.Empty;
 
         /// <summary>
+        /// Track whether Dispose has been called
+        /// </summary>
+        private bool disposed = false;
+
+        /// <summary>
         /// Initializes a new instance of the MainPage class
         /// </summary>
         public MainPage()
@@ -164,6 +169,45 @@ namespace Com.BraveLocation.BedsideClock
             }
         }
 
+        /// <summary>
+        /// Implement IDisposable
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Actual implementation of disposing
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void Dispose(bool disposing)
+        {
+            // Check to see if Dispose has already been called.
+            if (!this.disposed)
+            {
+                // If disposing equals true, dispose all managed 
+                // and unmanaged resources.
+                if (disposing)
+                {
+                    // Dispose managed resources.
+                    if (this.watcher != null)
+                    {
+                        this.watcher.Dispose();
+                    }
+
+                    if (this.accelerometer != null)
+                    {
+                        this.accelerometer.Dispose();
+                    }
+                }
+
+            }
+
+            this.disposed = true;
+        }
+        
         /// <summary>
         /// Event handler for power source changing
         /// </summary>
