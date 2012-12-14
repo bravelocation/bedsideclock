@@ -131,7 +131,15 @@ namespace Com.BraveLocation.BedsideClock
             // Setup accelerometer
             this.accelerometer = new Accelerometer();
             this.accelerometer.CurrentValueChanged += new EventHandler<SensorReadingEventArgs<AccelerometerReading>>(this.Accelerometer_CurrentValueChanged);
-            this.accelerometer.Start();
+
+            try
+            {
+                this.accelerometer.Start();
+            }
+            catch (AccelerometerFailedException)
+            {
+                // Not essential the accelerometer is working correctly, so don't fail on error
+            }
 
             // Setup do a location and weather lookup 
             this.GeocoordinateLookup();
@@ -181,7 +189,7 @@ namespace Com.BraveLocation.BedsideClock
         /// <summary>
         /// Actual implementation of disposing
         /// </summary>
-        /// <param name="disposing"></param>
+        /// <param name="disposing">Are we currently disposing</param>
         private void Dispose(bool disposing)
         {
             // Check to see if Dispose has already been called.
@@ -202,7 +210,6 @@ namespace Com.BraveLocation.BedsideClock
                         this.accelerometer.Dispose();
                     }
                 }
-
             }
 
             this.disposed = true;
