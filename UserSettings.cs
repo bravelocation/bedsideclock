@@ -1,17 +1,26 @@
-﻿using System;
-using System.IO.IsolatedStorage;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserSettings.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace com.bravelocation.bedsideClock
+namespace Com.BraveLocation.BedsideClock
 {
+    using System;
+    using System.IO.IsolatedStorage;
+    using System.Net;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
+    using System.Windows.Ink;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Animation;
+    using System.Windows.Shapes;
+
+    /// <summary>
+    /// Class that manages the user settings
+    /// </summary>
     public class UserSettings
     {
         /// <summary>
@@ -55,32 +64,37 @@ namespace com.bravelocation.bedsideClock
         private IsolatedStorageSettings userSettings = IsolatedStorageSettings.ApplicationSettings;
 
         /// <summary>
-        /// Current brightness property
+        /// Gets or sets the current brightness property
         /// </summary>
         public byte CurrentBrightness
         {
             get
             {
-                if (userSettings.Contains(UserSettings.BrightnessKey))
+                if (this.userSettings.Contains(UserSettings.BrightnessKey))
                 {
-                    return (byte)userSettings[UserSettings.BrightnessKey];
+                    return (byte)this.userSettings[UserSettings.BrightnessKey];
                 }
 
                 return UserSettings.MaximumBrightness;
             }
+
             set
             {
-                userSettings[UserSettings.BrightnessKey] = value;
+                this.userSettings[UserSettings.BrightnessKey] = value;
                 this.userSettings.Save();
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the clock should be dimmed
+        /// </summary>
         public bool Dimmed
         {
             get
             {
                 return this.CurrentBrightness != UserSettings.MaximumBrightness;
             }
+
             set
             {
                 if (value)
@@ -95,64 +109,67 @@ namespace com.bravelocation.bedsideClock
         }
 
         /// <summary>
-        /// Show location property
+        /// Gets or sets a value indicating whether the location should be shown
         /// </summary>
         public bool ShowLocation
         {
             get
             {
-                if (userSettings.Contains(UserSettings.LocationKey))
+                if (this.userSettings.Contains(UserSettings.LocationKey))
                 {
-                    return (bool)userSettings[UserSettings.LocationKey];
+                    return (bool)this.userSettings[UserSettings.LocationKey];
                 }
 
                 return true;
             }
+
             set
             {
-                userSettings[UserSettings.LocationKey] = value;
+                this.userSettings[UserSettings.LocationKey] = value;
                 this.userSettings.Save();
             }
         }
 
         /// <summary>
-        /// Show weather property
+        /// Gets or sets a value indicating whether the weather should be shown
         /// </summary>
         public bool ShowWeather
         {
             get
             {
-                if (userSettings.Contains(UserSettings.WeatherKey))
+                if (this.userSettings.Contains(UserSettings.WeatherKey))
                 {
-                    return (bool)userSettings[UserSettings.WeatherKey];
+                    return (bool)this.userSettings[UserSettings.WeatherKey];
                 }
 
                 return true;
             }
+
             set
             {
-                userSettings[UserSettings.WeatherKey] = value;
+                this.userSettings[UserSettings.WeatherKey] = value;
                 this.userSettings.Save();
             }
         }
 
         /// <summary>
-        /// Show moon property
+        /// Gets or sets a value indicating whether the moon should be shown
         /// </summary>
         public bool ShowMoon
         {
             get
             {
-                if (userSettings.Contains(UserSettings.MoonKey))
+                if (this.userSettings.Contains(UserSettings.MoonKey))
                 {
-                    return (bool)userSettings[UserSettings.MoonKey];
+                    return (bool)this.userSettings[UserSettings.MoonKey];
                 }
 
                 return true;
             }
+
             set
             {
-                userSettings[UserSettings.MoonKey] = value;
+                this.userSettings[UserSettings.MoonKey] = value;
                 this.userSettings.Save();
             }
         }

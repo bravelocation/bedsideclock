@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
+﻿//-----------------------------------------------------------------------
+// <copyright file="YahooLocationServices.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace com.bravelocation.bedsideClock
+namespace Com.BraveLocation.BedsideClock
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Device.Location;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using System.Xml.Linq;
+
     /// <summary>
     /// Static class to handle using Yahoo location service
     /// </summary>
@@ -18,12 +24,12 @@ namespace com.bravelocation.bedsideClock
         /// <summary>
         /// Comma splitter
         /// </summary>
-        private static char[] CommaSplitter = { ',' };
+        private static char[] commaSplitter = { ',' };
 
         /// <summary>
         /// String to use to format Uri using WOE ID
         /// </summary>
-        private static string YahooLocationFormattedUri = "http://where.yahooapis.com/geocode?q={0:0.00000000000000},+{1:0.00000000000000}&gflags=R&flags=G&appid=1auJbv6k";
+        private static string yahooLocationFormattedUri = "http://where.yahooapis.com/geocode?q={0:0.00000000000000},+{1:0.00000000000000}&gflags=R&flags=G&appid=1auJbv6k";
 
         /// <summary>
         /// Formats the correct Url to fetch address using current location
@@ -32,11 +38,16 @@ namespace com.bravelocation.bedsideClock
         /// <returns>Uri to call to fetch weather</returns>
         public static Uri YahooLocationUri(GeoCoordinate currentLocation)
         {
-            string locationUrl = String.Format(CultureInfo.InvariantCulture, YahooLocationServices.YahooLocationFormattedUri, currentLocation.Latitude, currentLocation.Longitude);
+            string locationUrl = string.Format(CultureInfo.InvariantCulture, YahooLocationServices.yahooLocationFormattedUri, currentLocation.Latitude, currentLocation.Longitude);
 
             return new Uri(locationUrl);
         }
 
+        /// <summary>
+        /// Parses the address from the XML returned from Yahoo!
+        /// </summary>
+        /// <param name="locationXml">Location XML to parse</param>
+        /// <returns>The address in the XML, or empty string if not found or on an error</returns>
         public static string ParseAddress(string locationXml)
         {
             // Parse the Yahoo XML returned
@@ -83,6 +94,11 @@ namespace com.bravelocation.bedsideClock
             return StringResources.LocationNotFoundText;
         }
 
+        /// <summary>
+        /// Parse the WOE ID from the XML returned from Yahoo!
+        /// </summary>
+        /// <param name="locationXml">Location XML to parse</param>
+        /// <returns>WOE ID, or empty string if not found or on an error</returns>
         public static string ParseWoeId(string locationXml)
         {
             XElement rootElement;
@@ -92,19 +108,19 @@ namespace com.bravelocation.bedsideClock
             }
             catch (XmlException)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             if (rootElement == null)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             // Check for error code
             XElement errorCode = rootElement.Element("Error");
             if (errorCode == null || errorCode.Value != "0")
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             XElement result = rootElement.Element("Result");
@@ -115,9 +131,8 @@ namespace com.bravelocation.bedsideClock
                 return YahooLocationServices.ParseLocationElement(woeid);
             }
 
-            return String.Empty;
+            return string.Empty;
         }
-
 
         /// <summary>
         /// Parses a location element for valid values
@@ -128,20 +143,19 @@ namespace com.bravelocation.bedsideClock
         {
             if (line == null)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             // Don't show if values are actually lat/long values
-            double parsedLine = Double.MinValue;
-            string[] parts = line.Value.Split(YahooLocationServices.CommaSplitter, StringSplitOptions.RemoveEmptyEntries);
+            double parsedLine = double.MinValue;
+            string[] parts = line.Value.Split(YahooLocationServices.commaSplitter, StringSplitOptions.RemoveEmptyEntries);
 
-            if (parts.Length == 2 && Double.TryParse(parts[0], out parsedLine) && Double.TryParse(parts[1], out parsedLine))
+            if (parts.Length == 2 && double.TryParse(parts[0], out parsedLine) && double.TryParse(parts[1], out parsedLine))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             return line.Value;
         }
-
     }
 }

@@ -1,7 +1,13 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="SunriseAndSunset.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace com.bravelocation.SunriseCalculator
+namespace Com.BraveLocation.SunriseCalculator
 {
+    using System;
+
     /// <summary>
     /// Class to calculate sunrise and sunset on any day at any location
     /// </summary>
@@ -12,15 +18,18 @@ namespace com.bravelocation.SunriseCalculator
         /// </summary>
         private enum TransitType
         {
+            /// <summary>Sunrise transit</summary>
             Sunrise,
+
+            /// <summary>Sunset transit</summary>
             Sunset
         }
 
         /// <summary>
         /// Calculates sunrise today
         /// </summary>
-        /// <param name="latitude">Latitude</param>
-        /// <param name="longitude">Longitude</param>
+        /// <param name="latitude">Latitude value</param>
+        /// <param name="longitude">Longitude value</param>
         /// <returns>Time of sunrise today</returns>
         public static DateTime Sunrise(double latitude, double longitude)
         {
@@ -30,8 +39,8 @@ namespace com.bravelocation.SunriseCalculator
         /// <summary>
         /// Calculates sunrise on day of given time
         /// </summary>
-        /// <param name="latitude">Latitude</param>
-        /// <param name="longitude">Longitude</param>
+        /// <param name="latitude">Latitude value</param>
+        /// <param name="longitude">Longitude value</param>
         /// <param name="currentTime">Current time</param>
         /// <returns>Time of sunrise on given day</returns>
         public static DateTime Sunrise(double latitude, double longitude, DateTime currentTime)
@@ -42,8 +51,8 @@ namespace com.bravelocation.SunriseCalculator
         /// <summary>
         /// Calculates sunset today
         /// </summary>
-        /// <param name="latitude">Latitude</param>
-        /// <param name="longitude">Longitude</param>
+        /// <param name="latitude">Latitude value</param>
+        /// <param name="longitude">Longitude value</param>
         /// <returns>Time of sunset today</returns>
         public static DateTime Sunset(double latitude, double longitude)
         {
@@ -53,8 +62,8 @@ namespace com.bravelocation.SunriseCalculator
         /// <summary>
         /// Calculates sunset on day of given time
         /// </summary>
-        /// <param name="latitude">Latitude</param>
-        /// <param name="longitude">Longitude</param>
+        /// <param name="latitude">Latitude value</param>
+        /// <param name="longitude">Longitude value</param>
         /// <param name="currentTime">Current time</param>
         /// <returns>Time of sunset on given day</returns>
         public static DateTime Sunset(double latitude, double longitude, DateTime currentTime)
@@ -63,23 +72,68 @@ namespace com.bravelocation.SunriseCalculator
         }
 
         /// <summary>
+        /// Calculates the offset to current date so time is correct
+        /// </summary>
+        /// <param name="original">original time</param>
+        /// <param name="offsetHours">Offset hours</param>
+        /// <returns>Converted time</returns>
+        public static DateTime ConvertOffsetToDateTime(DateTime original, double offsetHours)
+        {
+            double hours = Math.Floor(offsetHours);
+
+            double fractional = (offsetHours - hours) * 60;
+            double minutes = Math.Floor(fractional);
+
+            fractional = (fractional - minutes) * 60;
+            double seconds = Math.Floor(fractional);
+
+            if (hours < 0)
+            {
+                hours += 24.0;
+            }
+
+            DateTime thisDate = DateTime.SpecifyKind(new DateTime(original.Year, original.Month, original.Day, (int)hours, (int)minutes, (int)seconds), DateTimeKind.Utc);
+            return thisDate.ToLocalTime();
+        }
+
+        /// <summary>
+        /// Converts degrees to radians
+        /// </summary>
+        /// <param name="degrees">Number of degrees</param>
+        /// <returns>Converted value</returns>
+        public static double DegreesToRadians(double degrees)
+        {
+            return Math.PI * degrees / 180.0;
+        }
+
+        /// <summary>
+        /// Converts radians to degrees
+        /// </summary>
+        /// <param name="radians">Radians to convert</param>
+        /// <returns>Converted value</returns>
+        public static double RadiansToDegrees(double radians)
+        {
+            return radians * 180.0 / Math.PI;
+        }
+
+        /// <summary>
         /// Method that calculates the actual time of transit
         /// </summary>
-        /// <param name="latitude">Latitude</param>
-        /// <param name="longitude">Longitude</param>
+        /// <param name="latitude">Latitude value</param>
+        /// <param name="longitude">Longitude value</param>
         /// <param name="currentTime">Day of calculation</param>
         /// <param name="type">Transit type</param>
         /// <returns>Time of transit</returns>
         private static DateTime TransitTime(double latitude, double longitude, DateTime currentTime, TransitType type)
         {
             // See algorithm from http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
- 
+
             // 1. first calculate the day of the year
             int dayOfYear = currentTime.DayOfYear;
 
             // 2. convert the longitude to hour value and calculate an approximate time
-	        int longitudeHour = (int) Math.Round(longitude / 15);
-	
+            int longitudeHour = (int)Math.Round(longitude / 15);
+
             int approxTime = 0;
             if (type == TransitType.Sunrise)
             {
@@ -101,10 +155,10 @@ namespace com.bravelocation.SunriseCalculator
             double rightAscension = RadiansToDegrees(Math.Atan(0.91764 * Math.Tan(DegreesToRadians(sunLongitude)))) % 360.0;
 
             // 5b. right ascension value needs to be in the same quadrant as L
-            double longitudeQuadrant = (Math.Floor(sunLongitude / 90)) * 90;
-            double RAQuadrant = (Math.Floor(rightAscension / 90)) * 90;
+            double longitudeQuadrant = Math.Floor(sunLongitude / 90) * 90;
+            double rightAscensionQuadrant = Math.Floor(rightAscension / 90) * 90;
 
-            rightAscension = rightAscension + (longitudeQuadrant - RAQuadrant);
+            rightAscension = rightAscension + (longitudeQuadrant - rightAscensionQuadrant);
 
             // 5c. right ascension value needs to be converted into hours
             rightAscension = rightAscension / 15;
@@ -144,52 +198,6 @@ namespace com.bravelocation.SunriseCalculator
             double universalTime = (time - longitudeHour) % 24.0;
 
             return ConvertOffsetToDateTime(currentTime, universalTime);
-        }
-
-        /// <summary>
-        /// Calculates the offset to current date so time is correct
-        /// </summary>
-        /// <param name="original">original time</param>
-        /// <param name="offsetHours">Offset hours</param>
-        /// <returns>Converted time</returns>
-        private static DateTime ConvertOffsetToDateTime(DateTime original, double offsetHours)
-        {
-            double hours = Math.Floor(offsetHours);
-
-            double fractional = (offsetHours - hours) * 60;
-            double minutes = Math.Floor(fractional);
-
-            fractional = (fractional - minutes) * 60;
-            double seconds = Math.Floor(fractional);
-
-            if (hours < 0)
-            {
-                hours += 24.0;
-            }
-
-            
-            DateTime thisDate = DateTime.SpecifyKind(new DateTime(original.Year, original.Month, original.Day, (int)hours, (int)minutes, (int)seconds), DateTimeKind.Utc);
-            return thisDate.ToLocalTime();
-        }
-
-        /// <summary>
-        /// Converts degress to radians
-        /// </summary>
-        /// <param name="degrees">Number of degrees</param>
-        /// <returns>Converted value</returns>
-        private static double DegreesToRadians(double degrees)
-        {
-            return Math.PI * degrees / 180.0;
-        }
-
-        /// <summary>
-        /// Converts radians to degrees
-        /// </summary>
-        /// <param name="radians">Radians to convert</param>
-        /// <returns>Converted value</returns>
-        private static double RadiansToDegrees(double radians)
-        {
-            return radians * 180.0 / Math.PI;
         }
     }
 }

@@ -1,41 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+﻿//-----------------------------------------------------------------------
+// <copyright file="App.xaml.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace com.bravelocation.bedsideClock
+namespace Com.BraveLocation.BedsideClock
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO.IsolatedStorage;
+    using System.Linq;
+    using System.Net;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Animation;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+    using Microsoft.Phone.Controls;
+    using Microsoft.Phone.Shell;
+
+    /// <summary>
+    /// Main application class
+    /// </summary>
     public partial class App : Application
     {
         /// <summary>
         /// User settings
         /// </summary>
         private IsolatedStorageSettings userSettings = IsolatedStorageSettings.ApplicationSettings;
-        
-        /// <summary>
-        /// Provides easy access to the root frame of the Phone Application.
-        /// </summary>
-        /// <returns>The root frame of the Phone Application.</returns>
-        public PhoneApplicationFrame RootFrame { get; private set; }
 
         /// <summary>
-        /// Constructor for the Application object.
+        /// Avoid double-initialization
+        /// </summary>
+        private bool phoneApplicationInitialized = false;
+       
+        /// <summary>
+        /// Initializes a new instance of the App class.
         /// </summary>
         public App()
         {
             // Global handler for uncaught exceptions. 
-            UnhandledException += Application_UnhandledException;
+            this.UnhandledException += this.Application_UnhandledException;
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)
@@ -44,50 +52,76 @@ namespace com.bravelocation.bedsideClock
                 Application.Current.Host.Settings.EnableFrameRateCounter = true;
 
                 // Show the areas of the app that are being redrawn in each frame.
-                //Application.Current.Host.Settings.EnableRedrawRegions = true;
+                // Application.Current.Host.Settings.EnableRedrawRegions = true;
 
                 // Enable non-production analysis visualization mode, 
                 // which shows areas of a page that are being GPU accelerated with a colored overlay.
-                //Application.Current.Host.Settings.EnableCacheVisualization = true;
+                // Application.Current.Host.Settings.EnableCacheVisualization = true;
             }
 
             // Standard Silverlight initialization
-            InitializeComponent();
+            this.InitializeComponent();
 
             // Phone-specific initialization
-            InitializePhoneApplication();
+            this.InitializePhoneApplication();
 
             // Disable the user idle detection mode - so screen continues to display
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
         }
 
-        // Code to execute when the application is launching (eg, from Start)
-        // This code will not execute when the application is reactivated
+        /// <summary>
+        /// Gets easy access to the root frame of the Phone Application.
+        /// </summary>
+        /// <returns>The root frame of the Phone Application.</returns>
+        public PhoneApplicationFrame RootFrame { get; private set; }
+
+        /// <summary>
+        /// Code to execute when the application is launching (e.g., from Start)
+        /// This code will not execute when the application is reactivated
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
         }
 
-        // Code to execute when the application is activated (brought to foreground)
-        // This code will not execute when the application is first launched
+        /// <summary>
+        /// Code to execute when the application is activated (brought to foreground)
+        /// This code will not execute when the application is first launched
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
         }
 
-        // Code to execute when the application is deactivated (sent to background)
-        // This code will not execute when the application is closing
+        /// <summary>
+        /// Code to execute when the application is deactivated (sent to background)
+        /// This code will not execute when the application is closing
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
             this.userSettings.Save();
         }
 
-        // Code to execute when the application is closing (eg, user hit Back)
-        // This code will not execute when the application is deactivated
+        /// <summary>
+        /// Code to execute when the application is closing (e.g., user hit Back)
+        /// This code will not execute when the application is deactivated
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
             this.userSettings.Save();
         }
 
-        // Code to execute if a navigation fails
+        /// <summary>
+        /// Code to execute if a navigation fails
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             if (System.Diagnostics.Debugger.IsAttached)
@@ -97,7 +131,11 @@ namespace com.bravelocation.bedsideClock
             }
         }
 
-        // Code to execute on Unhandled Exceptions
+        /// <summary>
+        /// Code to execute on Unhandled Exceptions
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
             if (System.Diagnostics.Debugger.IsAttached)
@@ -109,36 +147,43 @@ namespace com.bravelocation.bedsideClock
 
         #region Phone application initialization
 
-        // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
-
-        // Do not add any additional code to this method
+        /// <summary>
+        /// Do not add any additional code to this method 
+        /// </summary>
         private void InitializePhoneApplication()
         {
-            if (phoneApplicationInitialized)
+            if (this.phoneApplicationInitialized)
+            {
                 return;
+            }
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
-            RootFrame = new PhoneApplicationFrame();
-            RootFrame.Navigated += CompleteInitializePhoneApplication;
+            this.RootFrame = new PhoneApplicationFrame();
+            this.RootFrame.Navigated += this.CompleteInitializePhoneApplication;
 
             // Handle navigation failures
-            RootFrame.NavigationFailed += RootFrame_NavigationFailed;
+            this.RootFrame.NavigationFailed += this.RootFrame_NavigationFailed;
 
             // Ensure we don't initialize again
-            phoneApplicationInitialized = true;
+            this.phoneApplicationInitialized = true;
         }
 
-        // Do not add any additional code to this method
+        /// <summary>
+        /// Do not add any additional code to this method 
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event args</param>
         private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
         {
             // Set the root visual to allow the application to render
-            if (RootVisual != RootFrame)
-                RootVisual = RootFrame;
+            if (this.RootVisual != this.RootFrame)
+            {
+                this.RootVisual = this.RootFrame;
+            }
 
             // Remove this handler since it is no longer needed
-            RootFrame.Navigated -= CompleteInitializePhoneApplication;
+            this.RootFrame.Navigated -= this.CompleteInitializePhoneApplication;
         }
 
         #endregion

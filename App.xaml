@@ -1,5 +1,5 @@
 ﻿<Application 
-    x:Class="com.bravelocation.bedsideClock.App"
+    x:Class="Com.BraveLocation.BedsideClock.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -8,7 +8,7 @@
 
     <!--Application Resources-->
     <Application.Resources>
-        <local:LocalisedStrings xmlns:local="clr-namespace:com.bravelocation.bedsideClock" x:Key="LocalisedStrings" />
+        <local:LocalisedStrings xmlns:local="clr-namespace:Com.BraveLocation.BedsideClock" x:Key="LocalisedStrings" />
         <Style x:Name="MainPageText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="Green"/>
             <Setter Property="FontSize" Value="24" />

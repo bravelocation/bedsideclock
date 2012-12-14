@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
+﻿//-----------------------------------------------------------------------
+// <copyright file="YahooWeather.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-
-namespace com.bravelocation.bedsideClock
+namespace Com.BraveLocation.BedsideClock
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Device.Location;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using System.Xml.Linq;
+
     /// <summary>
     /// Handles the fetching and parsing of data from Yahoo Weather
     /// </summary>
@@ -19,7 +24,7 @@ namespace com.bravelocation.bedsideClock
         /// <summary>
         /// String to use to format Uri using WOE ID
         /// </summary>
-        private static string YahooWeatherWOEIDFormattedUri = "http://weather.yahooapis.com/forecastrss?w={0}";
+        private static string yahooWeatherWOEIDFormattedUri = "http://weather.yahooapis.com/forecastrss?w={0}";
 
         /// <summary>
         /// Formats the correct Url to fetch weather using WOE ID
@@ -28,7 +33,7 @@ namespace com.bravelocation.bedsideClock
         /// <returns>Uri to call to fetch weather</returns>
         public static Uri YahooWeatherUri(string currentWoeId)
         {
-            string weatherUrl = String.Format(CultureInfo.InvariantCulture, YahooWeather.YahooWeatherWOEIDFormattedUri, currentWoeId);
+            string weatherUrl = string.Format(CultureInfo.InvariantCulture, YahooWeather.yahooWeatherWOEIDFormattedUri, currentWoeId);
 
             return new Uri(weatherUrl);
         }
@@ -37,7 +42,7 @@ namespace com.bravelocation.bedsideClock
         /// Parses the weather forecast code from the Yahoo! weather XML
         /// </summary>
         /// <param name="weatherXml">XML to be parsed</param>
-        /// <param name="currentLocation">Currentlocation</param>
+        /// <param name="currentLocation">Current location</param>
         /// <returns>Weather code</returns>
         public static int ParseWeather(string weatherXml, GeoCoordinate currentLocation)
         {
@@ -74,7 +79,7 @@ namespace com.bravelocation.bedsideClock
                                     XAttribute forecastCode = forecast.Attribute("code");
                                     if (forecastCode != null)
                                     {
-                                        return Int32.Parse(forecastCode.Value);
+                                        return int.Parse(forecastCode.Value);
                                     }
                                 }
                             }
@@ -153,10 +158,10 @@ namespace com.bravelocation.bedsideClock
             }
         }
 
-
         /// <summary>
         /// Calculates the day of the week to use for the forecast
         /// </summary>
+        /// <param name="currentLocation">Current location</param>
         /// <returns>String matching values from http://developer.yahoo.com/weather/ </returns>
         private static string WeatherForecastDay(GeoCoordinate currentLocation)
         {
@@ -190,8 +195,7 @@ namespace com.bravelocation.bedsideClock
             }
 
             // Logically cannot get here!
-            return String.Empty;
+            return string.Empty;
         }
-
     }
 }

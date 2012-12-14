@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="com.bravelocation.bedsideClock.Settings"
+    x:Class="Com.BraveLocation.BedsideClock.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -67,10 +67,10 @@
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="{Binding Path=LocalisedResources.AboutText1, Source={StaticResource LocalisedStrings}}" />
                     <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="Also, for non-English users please note the translations were done automatically by Bing Translate, so apologies if they are not very good :-(" />
-                    <HyperlinkButton x:Name="feedbackButton" Style="{StaticResource SettingsLink}" Click="feedbackButton_Click" Content="{Binding Path=LocalisedResources.FeedbackLinkText, Source={StaticResource LocalisedStrings}}" />
-                    <HyperlinkButton x:Name="aboutButton" Style="{StaticResource SettingsLink}" Click="aboutButton_Click" Content="{Binding Path=LocalisedResources.BraveLocationSiteLinkText, Source={StaticResource LocalisedStrings}}" />
-                    <HyperlinkButton x:Name="yahooWeatherButton" Style="{StaticResource SettingsLink}" Click="yahooWeatherButton_Click" Content="{Binding Path=LocalisedResources.YahooWeatherLinkText, Source={StaticResource LocalisedStrings}}" />
-                    <HyperlinkButton x:Name="elliottButton" Style="{StaticResource SettingsLink}" Click="elliottButton_Click" Content="{Binding Path=LocalisedResources.ElliottLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="feedbackButton" Style="{StaticResource SettingsLink}" Click="FeedbackButton_Click" Content="{Binding Path=LocalisedResources.FeedbackLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="aboutButton" Style="{StaticResource SettingsLink}" Click="AboutButton_Click" Content="{Binding Path=LocalisedResources.BraveLocationSiteLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="yahooWeatherButton" Style="{StaticResource SettingsLink}" Click="YahooWeatherButton_Click" Content="{Binding Path=LocalisedResources.YahooWeatherLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="elliottButton" Style="{StaticResource SettingsLink}" Click="ElliottButton_Click" Content="{Binding Path=LocalisedResources.ElliottLinkText, Source={StaticResource LocalisedStrings}}" />
                 </StackPanel>
             </controls:PivotItem>
 
@@ -78,7 +78,7 @@
             <controls:PivotItem Header="{Binding Path=LocalisedResources.PrivacySettingsLinkText, Source={StaticResource LocalisedStrings}}">
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap" Style="{StaticResource SettingsText}" Text="{Binding Path=LocalisedResources.PrivacyText1, Source={StaticResource LocalisedStrings}}" />
-                    <HyperlinkButton x:Name="privacyButton" Style="{StaticResource SettingsLink}" Click="privacyButton_Click" Content="{Binding Path=LocalisedResources.YahooPrivacySiteLinkText, Source={StaticResource LocalisedStrings}}" />
+                    <HyperlinkButton x:Name="privacyButton" Style="{StaticResource SettingsLink}" Click="PrivacyButton_Click" Content="{Binding Path=LocalisedResources.YahooPrivacySiteLinkText, Source={StaticResource LocalisedStrings}}" />
                 </StackPanel>
             </controls:PivotItem>
         </controls:Pivot>

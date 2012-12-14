@@ -1,42 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Globalization;
-using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Xml;
-using System.Xml.Linq;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Microsoft.Phone.Tasks;
-using Microsoft.Phone.Info;
+﻿//-----------------------------------------------------------------------
+// <copyright file="MainPage.xaml.cs" company="Brave Location">
+//     Copyright (c) Brave Location Ltd. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-using System.Windows.Threading;
-using Microsoft.Devices.Sensors;
-using System.Windows.Media.Imaging;
-
-namespace com.bravelocation.bedsideClock
+namespace Com.BraveLocation.BedsideClock
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Device.Location;
+    using System.Globalization;
+    using System.IO.IsolatedStorage;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Animation;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Shapes;
+    using System.Windows.Threading;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Microsoft.Devices.Sensors;
+    using Microsoft.Phone.Controls;
+    using Microsoft.Phone.Info;
+    using Microsoft.Phone.Shell;
+    using Microsoft.Phone.Tasks;
+
+    /// <summary>
+    /// Class for main page of application
+    /// </summary>
     public partial class MainPage : PhoneApplicationPage
     {
-        /// <summary>
-        /// User settings
-        /// </summary>
-        private UserSettings userSettings = new UserSettings();
-
         /// <summary>
         /// Number of seconds before fading
         /// </summary>
         private const int SecondsToFade = 5;
+        
+        /// <summary>
+        /// User settings
+        /// </summary>
+        private UserSettings userSettings = new UserSettings();
 
         /// <summary>
         /// The timer which drives the clock
@@ -92,25 +100,10 @@ namespace com.bravelocation.bedsideClock
         /// <summary>
         /// Current WOE ID
         /// </summary>
-        private string currentWoeId = String.Empty;
+        private string currentWoeId = string.Empty;
 
         /// <summary>
-        /// Current brightness property
-        /// </summary>
-        public byte CurrentBrightness
-        {
-            get 
-            {
-                return userSettings.CurrentBrightness; 
-            }
-            set
-            {
-                userSettings.CurrentBrightness = value;
-            }
-        }
-
-        /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the MainPage class
         /// </summary>
         public MainPage()
         {
@@ -119,7 +112,7 @@ namespace com.bravelocation.bedsideClock
             this.LocationText.Visibility = System.Windows.Visibility.Collapsed;
 
             // Setup orientation-changed handler
-            this.OrientationChanged += new EventHandler<OrientationChangedEventArgs>(MainPage_OrientationChanged);
+            this.OrientationChanged += new EventHandler<OrientationChangedEventArgs>(this.MainPage_OrientationChanged);
 
             // Setup the clock timer
             this.currentMinute = DateTime.Now.Minute;
@@ -127,12 +120,12 @@ namespace com.bravelocation.bedsideClock
 
             this.clockTimer = new DispatcherTimer();
             this.clockTimer.Interval = new TimeSpan(0, 0, 1);
-            this.clockTimer.Tick += new EventHandler(clockTimer_Tick);
+            this.clockTimer.Tick += new EventHandler(this.ClockTimer_Tick);
             this.clockTimer.Start();
 
             // Setup accelerometer
             this.accelerometer = new Accelerometer();
-            this.accelerometer.CurrentValueChanged += new EventHandler<SensorReadingEventArgs<AccelerometerReading>>(accelerometer_CurrentValueChanged);
+            this.accelerometer.CurrentValueChanged += new EventHandler<SensorReadingEventArgs<AccelerometerReading>>(this.Accelerometer_CurrentValueChanged);
             this.accelerometer.Start();
 
             // Setup do a location and weather lookup 
@@ -146,13 +139,29 @@ namespace com.bravelocation.bedsideClock
 
             // Show power warning if appropriate
             this.ShowPowerWarning(this.LocationText);
-            DeviceStatus.PowerSourceChanged += new EventHandler(DeviceStatus_PowerSourceChanged);
+            DeviceStatus.PowerSourceChanged += new EventHandler(this.DeviceStatus_PowerSourceChanged);
 
             // Do a location lookup if required
-            this.ShowLocation(userSettings.ShowLocation);
+            this.ShowLocation(this.userSettings.ShowLocation);
 
             // Show the time
             this.FadeDisplay();
+        }
+
+        /// <summary>
+        /// Gets or sets the current brightness property
+        /// </summary>
+        public byte CurrentBrightness
+        {
+            get
+            {
+                return this.userSettings.CurrentBrightness;
+            }
+
+            set
+            {
+                this.userSettings.CurrentBrightness = value;
+            }
         }
 
         /// <summary>
@@ -168,6 +177,7 @@ namespace com.bravelocation.bedsideClock
         /// <summary>
         /// Shows the power warning
         /// </summary>
+        /// <param name="textBlock">Text block where to show warning</param>
         private void ShowPowerWarning(TextBlock textBlock)
         {
             if (DeviceStatus.PowerSource == PowerSource.Battery)
@@ -177,7 +187,7 @@ namespace com.bravelocation.bedsideClock
             }
             else
             {
-                textBlock.Text = String.Empty;
+                textBlock.Text = string.Empty;
                 textBlock.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
@@ -188,7 +198,7 @@ namespace com.bravelocation.bedsideClock
         private void FadeDisplay()
         {
             // Set the opacity of the settings elements
-            double settingsOpacity = ((double)this.CurrentBrightness) / (UserSettings.MaximumBrightness);
+            double settingsOpacity = ((double)this.CurrentBrightness) / UserSettings.MaximumBrightness;
             if (settingsOpacity < 0.5) 
             { 
                 settingsOpacity = 0.5; 
@@ -201,7 +211,7 @@ namespace com.bravelocation.bedsideClock
         }
 
         /// <summary>
-        /// Unfades the display
+        /// Removes the fade from the display
         /// </summary>
         private void UnfadeDisplay()
         {
@@ -212,7 +222,6 @@ namespace com.bravelocation.bedsideClock
             this.LocationText.Opacity = UserSettings.MaximumBrightness;
             this.SettingsButton.Opacity = UserSettings.MaximumBrightness;
         }
-
 
         /// <summary>
         /// Handles orientation changed event
@@ -248,7 +257,7 @@ namespace com.bravelocation.bedsideClock
         /// </summary>
         /// <param name="sender">Event handler sender</param>
         /// <param name="e">Event handler arguments</param>
-        private void clockTimer_Tick(object sender, EventArgs e)
+        private void ClockTimer_Tick(object sender, EventArgs e)
         {
             DateTime current = DateTime.Now;
 
@@ -288,15 +297,33 @@ namespace com.bravelocation.bedsideClock
 
             switch (timeNow.Hour)
             {
-                case 0: currentColor = Colors.Blue; break;
-                case 1: currentColor = Colors.Blue; break;
-                case 2: currentColor = Colors.Blue; break;
-                case 3: currentColor = Colors.Purple; break;
-                case 4: currentColor = Colors.Purple; break;
-                case 5: currentColor = Colors.Red; break;
-                case 6: currentColor = Colors.Orange; break;
-                case 7: currentColor = Colors.Yellow; break;
-                default: currentColor = Colors.Green; break;
+                case 0: 
+                    currentColor = Colors.Blue; 
+                    break;
+                case 1: 
+                    currentColor = Colors.Blue; 
+                    break;
+                case 2: 
+                    currentColor = Colors.Blue; 
+                    break;
+                case 3: 
+                    currentColor = Colors.Purple; 
+                    break;
+                case 4: 
+                    currentColor = Colors.Purple; 
+                    break;
+                case 5: 
+                    currentColor = Colors.Red; 
+                    break;
+                case 6: 
+                    currentColor = Colors.Orange; 
+                    break;
+                case 7: 
+                    currentColor = Colors.Yellow; 
+                    break;
+                default: 
+                    currentColor = Colors.Green; 
+                    break;
             }
 
             this.CurrentTime.Foreground = new SolidColorBrush(currentColor);
@@ -375,15 +402,33 @@ namespace com.bravelocation.bedsideClock
 
             switch (currentMoonPhase)
             {
-                case MoonPhase.Phase.NewMoon: moonSource = "newmoon.png"; break;
-                case MoonPhase.Phase.WaxingCrescentMoon: moonSource = "crescentmoon.png"; break;
-                case MoonPhase.Phase.QuarterMoon: moonSource = "quartermoon.png"; break;
-                case MoonPhase.Phase.WaxingGibbousMoon: moonSource = "gibbousmoon.png"; break;
-                case MoonPhase.Phase.FullMoon: moonSource = "fullmoon.png"; break;
-                case MoonPhase.Phase.WaningGibbousMoon: moonSource = "gibbousmoon.png"; break;
-                case MoonPhase.Phase.LastQuarterMoon: moonSource = "quartermoon.png"; break;
-                case MoonPhase.Phase.WaningCrescentMoon: moonSource = "crescentmoon.png"; break;
-                default: moonSource = "quartermoon.png"; break;
+                case MoonPhase.Phase.NewMoon: 
+                    moonSource = "newmoon.png"; 
+                    break;
+                case MoonPhase.Phase.WaxingCrescentMoon: 
+                    moonSource = "crescentmoon.png"; 
+                    break;
+                case MoonPhase.Phase.QuarterMoon: 
+                    moonSource = "quartermoon.png"; 
+                    break;
+                case MoonPhase.Phase.WaxingGibbousMoon: 
+                    moonSource = "gibbousmoon.png"; 
+                    break;
+                case MoonPhase.Phase.FullMoon: 
+                    moonSource = "fullmoon.png"; 
+                    break;
+                case MoonPhase.Phase.WaningGibbousMoon: 
+                    moonSource = "gibbousmoon.png"; 
+                    break;
+                case MoonPhase.Phase.LastQuarterMoon: 
+                    moonSource = "quartermoon.png"; 
+                    break;
+                case MoonPhase.Phase.WaningCrescentMoon: 
+                    moonSource = "crescentmoon.png"; 
+                    break;
+                default:
+                    moonSource = "quartermoon.png"; 
+                    break;
             }
 
             this.SunTypeImage.Source = new BitmapImage(new Uri("moon/" + moonSource, UriKind.RelativeOrAbsolute));
@@ -394,10 +439,10 @@ namespace com.bravelocation.bedsideClock
         /// </summary>
         /// <param name="sender">Event sender</param>
         /// <param name="e">Event arguments</param>
-        private void accelerometer_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> e)
+        private void Accelerometer_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> e)
         {
             // Dispatches event to UI thread
-            Deployment.Current.Dispatcher.BeginInvoke(() => AccelerometerReadingChanged(e));
+            Deployment.Current.Dispatcher.BeginInvoke(() => this.AccelerometerReadingChanged(e));
         }
         
         /// <summary>
@@ -410,7 +455,7 @@ namespace com.bravelocation.bedsideClock
             int latestY = Convert.ToInt32(e.SensorReading.Acceleration.Y * 5.0);
             int latestZ = Convert.ToInt32(e.SensorReading.Acceleration.Z * 5.0);
 
-            if (latestX != this.currentX || latestY != currentY || latestZ != currentZ)
+            if (latestX != this.currentX || latestY != this.currentY || latestZ != this.currentZ)
             {
                 this.currentX = latestX;
                 this.currentY = latestY;
@@ -423,6 +468,7 @@ namespace com.bravelocation.bedsideClock
         /// <summary>
         /// Show the location information
         /// </summary>
+        /// <param name="showLocation">Show the location?</param>
         private void ShowLocation(bool showLocation)
         {
             // Uncomment this section when running in emulator
@@ -462,26 +508,26 @@ namespace com.bravelocation.bedsideClock
             {
                 this.watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High); // Use high accuracy.
                 this.watcher.MovementThreshold = 20; // Use MovementThreshold to ignore noise in the signal.
-                this.watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(watcher_StatusChanged);
+                this.watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(this.Watcher_StatusChanged);
             }
 
-            watcher.Start();
+            this.watcher.Start();
         }
 
         /// <summary>
         /// Event handler for geo-coordinate watcher changed event
         /// </summary>
-        /// <param name="sender">Sender</param>
+        /// <param name="sender">Object sender</param>
         /// <param name="e">Event arguments</param>
-        private void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void Watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
             if (e.Status == GeoPositionStatus.Ready)
             {
                 // Use the Position property of the GeoCoordinateWatcher object to get the current location.
-                this.currentLocation = watcher.Position.Location;
+                this.currentLocation = this.watcher.Position.Location;
 
-                //Stop the Location Service to conserve battery power.
-                watcher.Stop();
+                // Stop the Location Service to conserve battery power.
+                this.watcher.Stop();
                 
                 // Reset the sunset location just in case
                 this.SetTimeColorsAndIcon();
@@ -491,14 +537,14 @@ namespace com.bravelocation.bedsideClock
             }
             else if (e.Status == GeoPositionStatus.NoData)
             {
-                watcher.Stop();
+                this.watcher.Stop();
                 this.LocationText.Text = StringResources.LocationNotFoundText;
                 this.LocationProgressBar.IsEnabled = false;
                 this.LocationProgressBar.Visibility = System.Windows.Visibility.Collapsed;
             }
             else if (e.Status == GeoPositionStatus.Disabled)
             {
-                watcher.Stop();
+                this.watcher.Stop();
                 this.LocationText.Text = StringResources.LocationServiceDisabledText;
                 this.LocationProgressBar.IsEnabled = false;
                 this.LocationProgressBar.Visibility = System.Windows.Visibility.Collapsed;
@@ -512,16 +558,16 @@ namespace com.bravelocation.bedsideClock
         {
             // Use location service
             WebClient addressLookup = new WebClient();
-            addressLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(addressLookup_DownloadStringCompleted);
+            addressLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(this.AddressLookup_DownloadStringCompleted);
             addressLookup.DownloadStringAsync(YahooLocationServices.YahooLocationUri(this.currentLocation));
         }
 
         /// <summary>
         /// Event handler for address lookup call
         /// </summary>
-        /// <param name="sender">Sender</param>
+        /// <param name="sender">Object sender</param>
         /// <param name="e">Event arguments</param>
-        private void addressLookup_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void AddressLookup_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             this.LocationProgressBar.IsEnabled = false;
             this.LocationProgressBar.Visibility = System.Windows.Visibility.Collapsed;
@@ -547,23 +593,23 @@ namespace com.bravelocation.bedsideClock
         /// <param name="showWeather">Show weather</param>
         private void LookupWeather(bool showWeather)
         {
-            if (!showWeather || String.IsNullOrEmpty(this.currentWoeId))
+            if (!showWeather || string.IsNullOrEmpty(this.currentWoeId))
             {
                 return;
             }
 
             // Use weather service
             WebClient weatherLookup = new WebClient();
-            weatherLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(weatherLookup_DownloadStringCompleted);
+            weatherLookup.DownloadStringCompleted += new DownloadStringCompletedEventHandler(this.WeatherLookup_DownloadStringCompleted);
             weatherLookup.DownloadStringAsync(YahooWeather.YahooWeatherUri(this.currentWoeId));
         }
 
         /// <summary>
         /// Event handler for address lookup call
         /// </summary>
-        /// <param name="sender">Sender</param>
+        /// <param name="sender">Object sender</param>
         /// <param name="e">Event arguments</param>
-        private void weatherLookup_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void WeatherLookup_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             // Clear weather icon
             this.WeatherImage.Source = new BitmapImage(new Uri("blank.png", UriKind.RelativeOrAbsolute));
@@ -579,7 +625,7 @@ namespace com.bravelocation.bedsideClock
             int parsedWeather = YahooWeather.ParseWeather(e.Result, this.currentLocation);
 
             // Set the image URL
-            string imageName = String.Format(CultureInfo.InvariantCulture, "weather/{0}.png", YahooWeather.MapWeatherCodeToImage(parsedWeather));
+            string imageName = string.Format(CultureInfo.InvariantCulture, "weather/{0}.png", YahooWeather.MapWeatherCodeToImage(parsedWeather));
             this.WeatherImage.Source = new BitmapImage(new Uri(imageName, UriKind.RelativeOrAbsolute));
             this.WeatherImage.Visibility = System.Windows.Visibility.Visible;
         }
