@@ -9,7 +9,7 @@
     <Language code="it-IT" />
     <Language code="" />
   </Languages>
-  <App xmlns="" ProductID="{210d15f5-5646-47fd-8e51-4fceb6d5de0c}" Title="Bedside Clock" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="bedsiteclock author" Description="Bedside Clock simply turns your phone into a clock that is always on - perfect for putting next to your bed so you can easily see the time when you wake.&#xD;&#xA;&#xD;&#xA;Features include:&#xD;&#xA;- clock changes color through the night so you can tell how long you have to lie" Publisher="bedsiteclock" PublisherID="{7e197aa8-1dcd-48a2-b9d1-ec07e8ec8983}">
+  <App xmlns="" ProductID="{210d15f5-5646-47fd-8e51-4fceb6d5de0c}" Title="Bedside Clock" RuntimeType="Silverlight" Version="4.0.0.0" Genre="apps.normal" Author="Brave Location" Description="Bedside Clock simply turns your phone into a clock that is always on - perfect for putting next to your bed so you can easily see the time when you wake.&#xD;&#xA;&#xD;&#xA;Features include:&#xD;&#xA;- clock changes color through the night so you can tell how long you have to lie" Publisher="Brave Location" PublisherID="{7e197aa8-1dcd-48a2-b9d1-ec07e8ec8983}">
     <IconPath IsRelative="true" IsResource="false">nounclock.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_LOCATION" />
@@ -33,9 +33,13 @@
           </BackBackgroundImageURI>
           <BackTitle>
           </BackTitle>
+          <LargeBackgroundImageURI IsRelative="true" IsResource="false">nounclock.png</LargeBackgroundImageURI>
+          <LargeBackContent />
+          <LargeBackBackgroundImageURI IsRelative="true" IsResource="false">
+          </LargeBackBackgroundImageURI>
           <DeviceLockImageURI>
           </DeviceLockImageURI>
-          <HasLarge>false</HasLarge>
+          <HasLarge>True</HasLarge>
         </TemplateFlip>
       </PrimaryToken>
     </Tokens>
