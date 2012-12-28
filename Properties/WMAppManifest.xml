@@ -10,7 +10,7 @@
     <Language code="" />
   </Languages>
   <App xmlns="" ProductID="{210d15f5-5646-47fd-8e51-4fceb6d5de0c}" Title="Bedside Clock" RuntimeType="Silverlight" Version="4.0.0.0" Genre="apps.normal" Author="Brave Location" Description="Bedside Clock simply turns your phone into a clock that is always on - perfect for putting next to your bed so you can easily see the time when you wake.&#xD;&#xA;&#xD;&#xA;Features include:&#xD;&#xA;- clock changes color through the night so you can tell how long you have to lie" Publisher="Brave Location" PublisherID="{7e197aa8-1dcd-48a2-b9d1-ec07e8ec8983}">
-    <IconPath IsRelative="true" IsResource="false">nounclock.png</IconPath>
+    <IconPath IsRelative="true" IsResource="false">appicon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_LOCATION" />
       <Capability Name="ID_CAP_NETWORKING" />
@@ -22,25 +22,25 @@
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="bedsiteclockToken" TaskName="_default">
-        <TemplateFlip>
-          <SmallImageURI IsResource="false" IsRelative="true">nounclock.png</SmallImageURI>
+        <TemplateIconic>
+          <SmallImageURI IsRelative="true" IsResource="false">smalltile.png</SmallImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsResource="false" IsRelative="true">nounclock.png</BackgroundImageURI>
+          <IconImageURI IsRelative="true" IsResource="false">largetile.png</IconImageURI>
           <Title>Bedside Clock</Title>
-          <BackContent>
-          </BackContent>
-          <BackBackgroundImageURI>
-          </BackBackgroundImageURI>
-          <BackTitle>
-          </BackTitle>
-          <LargeBackgroundImageURI IsRelative="true" IsResource="false">nounclock.png</LargeBackgroundImageURI>
-          <LargeBackContent />
-          <LargeBackBackgroundImageURI IsRelative="true" IsResource="false">
-          </LargeBackBackgroundImageURI>
-          <DeviceLockImageURI>
+          <Message>
+          </Message>
+          <BackgroundColor>
+          </BackgroundColor>
+          <HasLarge>False</HasLarge>
+          <LargeContent1>
+          </LargeContent1>
+          <LargeContent2>
+          </LargeContent2>
+          <LargeContent3>
+          </LargeContent3>
+          <DeviceLockImageURI IsRelative="true" IsResource="false">
           </DeviceLockImageURI>
-          <HasLarge>True</HasLarge>
-        </TemplateFlip>
+        </TemplateIconic>
       </PrimaryToken>
     </Tokens>
     <ScreenResolutions>
