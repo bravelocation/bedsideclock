@@ -22,6 +22,12 @@ namespace Com.BraveLocation.BedsideClock
     public static class YahooLocationServices
     {
         /// <summary>
+        /// API Key to use for Yahoo Location Services
+        /// N.B. If reusing this code, please use your own API key from http://developer.apps.yahoo.com/
+        /// </summary>
+        private static string yahooApiKey = "1auJbv6k";
+
+        /// <summary>
         /// Comma splitter
         /// </summary>
         private static char[] commaSplitter = { ',' };
@@ -29,7 +35,7 @@ namespace Com.BraveLocation.BedsideClock
         /// <summary>
         /// String to use to format Uri using WOE ID
         /// </summary>
-        private static string yahooLocationFormattedUri = "http://where.yahooapis.com/geocode?q={0:0.00000000000000},+{1:0.00000000000000}&gflags=R&flags=G&appid=1auJbv6k";
+        private static string yahooLocationFormattedUri = "http://where.yahooapis.com/geocode?q={0:0.00000000000000},+{1:0.00000000000000}&gflags=R&flags=G&appid={2}";
 
         /// <summary>
         /// Formats the correct Url to fetch address using current location
@@ -38,7 +44,7 @@ namespace Com.BraveLocation.BedsideClock
         /// <returns>Uri to call to fetch weather</returns>
         public static Uri YahooLocationUri(GeoCoordinate currentLocation)
         {
-            string locationUrl = string.Format(CultureInfo.InvariantCulture, YahooLocationServices.yahooLocationFormattedUri, currentLocation.Latitude, currentLocation.Longitude);
+            string locationUrl = string.Format(CultureInfo.InvariantCulture, YahooLocationServices.yahooLocationFormattedUri, currentLocation.Latitude, currentLocation.Longitude, YahooLocationServices.yahooApiKey);
 
             return new Uri(locationUrl);
         }
