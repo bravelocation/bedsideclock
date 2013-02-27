@@ -177,6 +177,18 @@ namespace Com.BraveLocation.BedsideClock
             }
         }
 
+
+        /// <summary>
+        /// Overrides the default back button behavior to ensure application is quit from main screen on "Back" press
+        /// </summary>
+        /// <param name="e">Event arguments</param>
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            IsolatedStorageSettings.ApplicationSettings.Save();
+            Application.Current.Terminate();
+        }
+
         /// <summary>
         /// Implement IDisposable
         /// </summary>
