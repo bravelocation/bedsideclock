@@ -4,7 +4,7 @@ This repository holds the code for [Bedside Clock Windows Phone App](http://www.
 
 This was originally a project just for me to learn about developing for Windows Phone, and to replace the better built-in clock I was missing from my Android phone. You can probably tell this with some of the slightly gratuitous features I added (phase of the moon calculations anyone?)
 
-It's done reasonably well at the [App Store](http://www.windowsphone.com/en-gb/store/app/bedside-clock/2670018c-c233-e011-854c-00237de2db9e) with around 16,000 downloads as of February 2013. However, I'm getting rid of my Windows Phone so I thought I'd donate the code to the community in case anyone was interested in developing further.
+It's done reasonably well at the [App Store](http://www.windowsphone.com/en-gb/store/app/bedside-clock/2670018c-c233-e011-854c-00237de2db9e) with around 13,000 downloads as of February 2013. However, I'm getting rid of my Windows Phone so I thought I'd donate the code to the community in case anyone was interested in developing further.
 
 ## The Code ##
 
